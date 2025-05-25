@@ -1,0 +1,85 @@
+openapi: 3.0.2
+info:
+  version: 1.0.0
+  title: API Referencement
+  description: Trouver toutes les informations sur les membres de l'UTRQE
+servers:
+  - url: /api/referencement/v1
+paths:
+  /membres:
+    get:
+      tags:
+        - referencement_v1
+      summary: >-
+        Retourne tous les referencements
+      operationId: getReferencement
+      responses:
+        '200':
+          description: Succès
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Membre"
+        '500':
+          description: Une erreur interne s'est produite.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+components:
+  schemas:
+    Membre:
+      type: object
+      properties:
+        nom:
+          type: string
+        prenom:
+          type: string
+        numeroTelephone:
+          type: string
+          pattern: "^\\(\\d{3}\\)\\d{3}-\\d{4}$"
+          example: "(555)555-5555"
+        eMail:
+          type: string
+          format: email
+          example: "user@example.com"
+        emploiType:
+          type: string
+        estSalarie:
+          type: boolean
+          example: true
+        estEnRecherche:
+          type: boolean
+          example: true
+    Error:
+      type: object
+      properties:
+        status:
+          type: string
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorItem'
+    ErrorItem:
+      type: object
+      properties:
+        exception:
+          type: string
+        systemId:
+          type: string
+        code:
+          type: string
+        systemName:
+          type: string
+        meta:
+          type: object
+          properties: {}
+        detail:
+          type: string
+        time:
+          type: string
+        message:
+          type: string
